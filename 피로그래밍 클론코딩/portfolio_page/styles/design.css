@@ -1,0 +1,1148 @@
+body {
+    background-color: #000;
+}
+
+#portfolio {
+    display: flex;
+    flex-direction: column;
+}
+
+/* head 영역 */
+#head {
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#head a {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+#head > a:first-child {
+    transition: none;
+}
+
+#head > a:first-child:hover {
+    transform: none;
+}
+
+#head .link a {
+    transition: color 0.3s;
+}
+
+#head .link a:hover {
+    transform: none;
+}
+
+#head a img {
+    height: 40px;
+    width: auto;
+}
+
+#head .link {
+    display: flex;
+    gap: 30px;
+}
+
+#head .link a {
+    border-right: none;
+}
+
+#head a span {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #00ff00;
+}
+
+/* middle 영역 */
+#middle {
+    padding: 10px 40px;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#middle .level {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+#middle .level a {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #fff;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+/* 트립테일러 버튼 */
+#middle .triptailor {
+    width: 100%;
+    background-color: #4a4a4a;
+    padding: 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+#middle .triptailor:hover {
+    transform: translateY(-2px);
+}
+
+#middle .triptailor::before {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 25px;
+    height: 20px;
+    background-image: 
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff);
+    background-size: 100% 2px;
+    background-position: 0 0, 0 8px, 0 16px;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#middle .triptailor:hover::before {
+    background-size: 50% 2px, 100% 2px, 50% 2px;
+    background-position: 0 0, 0 8px, 100% 16px;
+}
+
+#middle .triptailor .triptailor_left {
+    width: 13%;
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+#middle .triptailor .triptailor_left img {
+    max-width: 80%;
+    max-height: 80%;
+    transition: all 0.3s ease;
+}
+
+#middle .triptailor:hover .triptailor_left img {
+    transform: scale(1.1);
+}
+
+#middle .triptailor .triptailor_right {
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background-color: #4a4a4a;
+}
+
+#middle .triptailor .triptailor_right h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#middle .triptailor .triptailor_right .explain {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+#middle .triptailor .triptailor_right .members {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#middle .triptailor .triptailor_right .members .leader {
+    padding: 7px 10px;
+    background-color: #0094d9;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+#middle .triptailor .triptailor_right .members span {
+    padding: 7px 10px;
+    background-color: #666;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+/* 틈틈이 버튼 */
+#middle .teumteumi {
+    width: 100%;
+    background-color: #4a4a4a;
+    padding: 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-top: 20px;
+}
+
+#middle .teumteumi:hover {
+    transform: translateY(-2px);
+}
+
+#middle .teumteumi::before {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 25px;
+    height: 20px;
+    background-image: 
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff);
+    background-size: 100% 2px;
+    background-position: 0 0, 0 8px, 0 16px;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#middle .teumteumi:hover::before {
+    background-size: 50% 2px, 100% 2px, 50% 2px;
+    background-position: 0 0, 0 8px, 100% 16px;
+}
+
+#middle .teumteumi .teumteumi_left {
+    width: 13%;
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+#middle .teumteumi .teumteumi_left img {
+    max-width: 80%;
+    max-height: 80%;
+    transition: all 0.3s ease;
+}
+
+#middle .teumteumi:hover .teumteumi_left img {
+    transform: scale(1.1);
+}
+
+#middle .teumteumi .teumteumi_right {
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background-color: #4a4a4a;
+}
+
+#middle .teumteumi .teumteumi_right h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#middle .teumteumi .teumteumi_right .explain {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+#middle .teumteumi .teumteumi_right .members {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#middle .teumteumi .teumteumi_right .members .leader {
+    padding: 7px 10px;
+    background-color: #0094d9;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+#middle .teumteumi .teumteumi_right .members span {
+    padding: 7px 10px;
+    background-color: #666;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+/* 세탁매니저 버튼 */
+#middle .laundrymanager {
+    width: 100%;
+    background-color: #4a4a4a;
+    padding: 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-top: 20px;
+}
+
+#middle .laundrymanager:hover {
+    transform: translateY(-2px);
+}
+
+#middle .laundrymanager::before {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 25px;
+    height: 20px;
+    background-image: 
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff);
+    background-size: 100% 2px;
+    background-position: 0 0, 0 8px, 0 16px;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#middle .laundrymanager:hover::before {
+    background-size: 50% 2px, 100% 2px, 50% 2px;
+    background-position: 0 0, 0 8px, 100% 16px;
+}
+
+#middle .laundrymanager .laundrymanager_left {
+    width: 13%;
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+#middle .laundrymanager .laundrymanager_left img {
+    max-width: 80%;
+    max-height: 80%;
+    transition: all 0.3s ease;
+}
+
+#middle .laundrymanager:hover .laundrymanager_left img {
+    transform: scale(1.1);
+}
+
+#middle .laundrymanager .laundrymanager_right {
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background-color: #4a4a4a;
+}
+
+#middle .laundrymanager .laundrymanager_right h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#middle .laundrymanager .laundrymanager_right .explain {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+#middle .laundrymanager .laundrymanager_right .members {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#middle .laundrymanager .laundrymanager_right .members .leader {
+    padding: 7px 10px;
+    background-color: #0094d9;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+#middle .laundrymanager .laundrymanager_right .members span {
+    padding: 7px 10px;
+    background-color: #666;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+/* 무디코 버튼 */
+#middle .moodico {
+    width: 100%;
+    background-color: #4a4a4a;
+    padding: 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-top: 20px;
+}
+
+#middle .moodico:hover {
+    transform: translateY(-2px);
+}
+
+#middle .moodico::before {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 25px;
+    height: 20px;
+    background-image: 
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff);
+    background-size: 100% 2px;
+    background-position: 0 0, 0 8px, 0 16px;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#middle .moodico:hover::before {
+    background-size: 50% 2px, 100% 2px, 50% 2px;
+    background-position: 0 0, 0 8px, 100% 16px;
+}
+
+#middle .moodico .moodico_left {
+    width: 13%;
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+#middle .moodico .moodico_left img {
+    max-width: 80%;
+    max-height: 80%;
+    transition: all 0.3s ease;
+}
+
+#middle .moodico:hover .moodico_left img {
+    transform: scale(1.1);
+}
+
+#middle .moodico .moodico_right {
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background-color: #4a4a4a;
+}
+
+#middle .moodico .moodico_right h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#middle .moodico .moodico_right .explain {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+#middle .moodico .moodico_right .members {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#middle .moodico .moodico_right .members .leader {
+    padding: 7px 10px;
+    background-color: #0094d9;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+#middle .moodico .moodico_right .members span {
+    padding: 7px 10px;
+    background-color: #666;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+/* TeamFlow 버튼 */
+#middle .teamflow {
+    width: 100%;
+    background-color: #4a4a4a;
+    padding: 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-top: 20px;
+}
+
+#middle .teamflow:hover {
+    transform: translateY(-2px);
+}
+
+#middle .teamflow::before {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 25px;
+    height: 20px;
+    background-image: 
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff);
+    background-size: 100% 2px;
+    background-position: 0 0, 0 8px, 0 16px;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#middle .teamflow:hover::before {
+    background-size: 50% 2px, 100% 2px, 50% 2px;
+    background-position: 0 0, 0 8px, 100% 16px;
+}
+
+#middle .teamflow .teamflow_left {
+    width: 13%;
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+#middle .teamflow .teamflow_left img {
+    max-width: 80%;
+    max-height: 80%;
+    transition: all 0.3s ease;
+}
+
+#middle .teamflow:hover .teamflow_left img {
+    transform: scale(1.1);
+}
+
+#middle .teamflow .teamflow_right {
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background-color: #4a4a4a;
+}
+
+#middle .teamflow .teamflow_right h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#middle .teamflow .teamflow_right .explain {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+#middle .teamflow .teamflow_right .members {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#middle .teamflow .teamflow_right .members .leader {
+    padding: 7px 10px;
+    background-color: #0094d9;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+#middle .teamflow .teamflow_right .members span {
+    padding: 7px 10px;
+    background-color: #666;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+/* 헬스턴트 버튼 */
+#middle .healthtant {
+    width: 100%;
+    background-color: #4a4a4a;
+    padding: 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-top: 20px;
+}
+
+#middle .healthtant:hover {
+    transform: translateY(-2px);
+}
+
+#middle .healthtant::before {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 25px;
+    height: 20px;
+    background-image: 
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff),
+        linear-gradient(to right, #fff, #fff);
+    background-size: 100% 2px;
+    background-position: 0 0, 0 8px, 0 16px;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#middle .healthtant:hover::before {
+    background-size: 50% 2px, 100% 2px, 50% 2px;
+    background-position: 0 0, 0 8px, 100% 16px;
+}
+
+#middle .healthtant .healthtant_left {
+    width: 13%;
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+#middle .healthtant .healthtant_left img {
+    max-width: 80%;
+    max-height: 80%;
+    transition: all 0.3s ease;
+}
+
+#middle .healthtant:hover .healthtant_left img {
+    transform: scale(1.1);
+}
+
+#middle .healthtant .healthtant_right {
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background-color: #4a4a4a;
+}
+
+#middle .healthtant .healthtant_right h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#middle .healthtant .healthtant_right .explain {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+#middle .healthtant .healthtant_right .members {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#middle .healthtant .healthtant_right .members .leader {
+    padding: 7px 10px;
+    background-color: #0094d9;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+#middle .healthtant .healthtant_right .members span {
+    padding: 7px 10px;
+    background-color: #666;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+/* bottom 영역 */
+#bottom {
+    background-color: #4a4a4a;
+    padding: 60px;
+    color: #fff;
+}
+
+#bottom > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#bottom ul {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+#bottom ul li {
+    display: flex;
+    align-items: center;
+}
+
+#bottom ul li.rule {
+    display: block;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+#bottom ul li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+#bottom ul li a:hover {
+    transform: translateY(-2px);
+}
+
+#bottom ul li.rule a {
+    font-size: 1.0rem;
+    font-weight: 400;
+}
+
+#bottom ul li img {
+    width: 24px;
+    height: 24px;
+}
+
+#bottom ul li.mail a {
+    font-size: 0.9rem;
+}
+
+.link {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: center;
+}
+
+.link a {
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    padding: 0 15px;
+    border-right: 1px solid #666;
+}
+
+.link a:last-child {
+    border-right: none;
+}
+
+.link a:hover {
+    transform: translateY(-2px);
+}
+
+.closing {
+    text-align: center;
+    color: #d3d3d3;
+    font-size: 0.85rem;
+    background-color: #3a3a3a;
+    padding: 15px;
+    margin: 30px -40px -40px -40px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    #head {
+        padding: 20px 40px;
+        gap: 25px;
+    }
+
+    #middle {
+        padding: 40px 40px;
+    }
+
+    button.triptailor,
+    button.teumteumi,
+    button.laundrymanager,
+    button.moodico,
+    button.teamflow,
+    button.healthtant {
+        flex-direction: column;
+    }
+
+    .triptailor_left,
+    .teumteumi_left,
+    .laundrymanager_left,
+    .moodico_left,
+    .teamflow_left,
+    .healthtant_left {
+        width: 100%;
+        height: 300px;
+    }
+
+    .triptailor_right,
+    .teumteumi_right,
+    .laundrymanager_right,
+    .moodico_right,
+    .teamflow_right,
+    .healthtant_right {
+        width: 100%;
+        padding: 40px;
+    }
+
+    .triptailor_right::after,
+    .teumteumi_right::after,
+    .laundrymanager_right::after,
+    .moodico_right::after,
+    .teamflow_right::after,
+    .healthtant_right::after {
+        display: none;
+    }
+
+    #bottom {
+        padding: 40px 40px 30px;
+    }
+}
+
+@media (max-width: 632px) {
+    #head {
+        padding: 15px 20px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    #head img {
+        height: 30px;
+    }
+
+    #head a {
+        font-size: 0.9rem;
+    }
+
+    #middle {
+        padding: 10px 20px;
+    }
+    
+    #middle .triptailor,
+    #middle .teumteumi,
+    #middle .laundrymanager,
+    #middle .moodico,
+    #middle .teamflow,
+    #middle .healthtant {
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 20px;
+    }
+    
+    #middle .triptailor::before,
+    #middle .teumteumi::before,
+    #middle .laundrymanager::before,
+    #middle .moodico::before,
+    #middle .teamflow::before,
+    #middle .healthtant::before {
+        right: 15px;
+        top: 15px;
+    }
+    
+    #middle .triptailor .triptailor_left,
+    #middle .teumteumi .teumteumi_left,
+    #middle .laundrymanager .laundrymanager_left,
+    #middle .moodico .moodico_left,
+    #middle .teamflow .teamflow_left,
+    #middle .healthtant .healthtant_left {
+        width: 50%;
+        max-width: 200px;
+        height: 150px;
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+    
+    #middle .triptailor .triptailor_right,
+    #middle .teumteumi .teumteumi_right,
+    #middle .laundrymanager .laundrymanager_right,
+    #middle .moodico .moodico_right,
+    #middle .teamflow .teamflow_right,
+    #middle .healthtant .healthtant_right {
+        width: 100%;
+        padding: 0;
+        text-align: center;
+    }
+    
+    #middle .triptailor .triptailor_right h1,
+    #middle .teumteumi .teumteumi_right h1,
+    #middle .laundrymanager .laundrymanager_right h1,
+    #middle .moodico .moodico_right h1,
+    #middle .teamflow .teamflow_right h1,
+    #middle .healthtant .healthtant_right h1 {
+        font-size: 1.3rem;
+    }
+    
+    #middle .triptailor .triptailor_right .explain,
+    #middle .teumteumi .teumteumi_right .explain,
+    #middle .laundrymanager .laundrymanager_right .explain,
+    #middle .moodico .moodico_right .explain,
+    #middle .teamflow .teamflow_right .explain,
+    #middle .healthtant .healthtant_right .explain {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    #middle .triptailor .triptailor_right .members,
+    #middle .teumteumi .teumteumi_right .members,
+    #middle .laundrymanager .laundrymanager_right .members,
+    #middle .moodico .moodico_right .members,
+    #middle .teamflow .teamflow_right .members,
+    #middle .healthtant .healthtant_right .members {
+        justify-content: center;
+    }
+
+    .level {
+        font-size: 1.6rem;
+        margin-bottom: 30px;
+    }
+
+    .level a {
+        font-size: 1rem;
+        margin-left: 15px;
+    }
+
+    #bottom {
+        padding: 30px 20px;
+    }
+    
+    #bottom > div {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    #bottom ul {
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .link {
+        justify-content: center;
+    }
+    
+    .closing {
+        margin: 20px -20px -30px -20px;
+    }
+
+    #link {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 492px) {
+    #head {
+        gap: 15px;
+    }
+
+    #head a {
+        font-size: 0.85rem;
+    }
+
+    #middle {
+        padding: 10px 15px;
+    }
+    
+    #middle .level {
+        font-size: 1.3rem;
+    }
+    
+    #middle .level a {
+        font-size: 1rem;
+    }
+    
+    #middle .triptailor,
+    #middle .teumteumi,
+    #middle .laundrymanager,
+    #middle .moodico,
+    #middle .teamflow,
+    #middle .healthtant {
+        padding: 20px 15px;
+    }
+    
+    #middle .triptailor::before,
+    #middle .teumteumi::before,
+    #middle .laundrymanager::before,
+    #middle .moodico::before,
+    #middle .teamflow::before,
+    #middle .healthtant::before {
+        right: 10px;
+        top: 10px;
+        width: 22px;
+    }
+    
+    #middle .triptailor .triptailor_left,
+    #middle .teumteumi .teumteumi_left,
+    #middle .laundrymanager .laundrymanager_left,
+    #middle .moodico .moodico_left,
+    #middle .teamflow .teamflow_left,
+    #middle .healthtant .healthtant_left {
+        width: 60%;
+        max-width: 180px;
+        height: 130px;
+        padding: 12px;
+    }
+    
+    #middle .triptailor .triptailor_right h1,
+    #middle .teumteumi .teumteumi_right h1,
+    #middle .laundrymanager .laundrymanager_right h1,
+    #middle .moodico .moodico_right h1,
+    #middle .teamflow .teamflow_right h1,
+    #middle .healthtant .healthtant_right h1 {
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+    }
+    
+    #middle .triptailor .triptailor_right .explain,
+    #middle .teumteumi .teumteumi_right .explain,
+    #middle .laundrymanager .laundrymanager_right .explain,
+    #middle .moodico .moodico_right .explain,
+    #middle .teamflow .teamflow_right .explain,
+    #middle .healthtant .healthtant_right .explain {
+        font-size: 1.0rem;
+        margin-bottom: 15px;
+    }
+    
+    #middle .triptailor .triptailor_right .members,
+    #middle .teumteumi .teumteumi_right .members,
+    #middle .laundrymanager .laundrymanager_right .members,
+    #middle .moodico .moodico_right .members,
+    #middle .teamflow .teamflow_right .members,
+    #middle .healthtant .healthtant_right .members {
+        gap: 8px;
+    }
+    
+    #middle .triptailor .triptailor_right .members .leader,
+    #middle .triptailor .triptailor_right .members span,
+    #middle .teumteumi .teumteumi_right .members .leader,
+    #middle .teumteumi .teumteumi_right .members span,
+    #middle .laundrymanager .laundrymanager_right .members .leader,
+    #middle .laundrymanager .laundrymanager_right .members span,
+    #middle .moodico .moodico_right .members .leader,
+    #middle .moodico .moodico_right .members span,
+    #middle .teamflow .teamflow_right .members .leader,
+    #middle .teamflow .teamflow_right .members span,
+    #middle .healthtant .healthtant_right .members .leader,
+    #middle .healthtant .healthtant_right .members span {
+        flex: 0 0 calc(33.33% - 6px);
+        max-width: calc(33.33% - 6px);
+        min-width: 0;
+        text-align: center;
+        padding: 7px 10px;                
+        font-size: 0.9rem;
+    }
+
+    .level {
+        font-size: 1.4rem;
+    }
+
+    #bottom {
+        padding: 25px 15px;
+    }
+
+    #bottom ul {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    #bottom ul li a {
+        font-size: 0.9rem;
+    }
+    
+    #bottom ul li img {
+        width: 22px;
+        height: 22px;
+    }
+
+    #link {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .link {
+        display: none;
+    }
+    
+    .closing {
+        display: none;
+    }
+}
