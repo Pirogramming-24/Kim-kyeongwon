@@ -127,8 +127,8 @@ function displayResult(userNumbers, strikes, balls) {
   resultRow.appendChild(colonDiv);
   resultRow.appendChild(rightDiv);
 
-  // 최신 결과가 맨 위에 오도록 추가
-  resultsDiv.insertBefore(resultRow, resultsDiv.firstChild);
+  // 최신 결과가 이전 결과 아래에 쌓이도록 추가
+  resultsDiv.appendChild(resultRow);
 } // TODO 6번 완료
 
 // 게임 종료 처리하는 함수
