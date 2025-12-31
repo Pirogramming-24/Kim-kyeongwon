@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ review.title }} - My Movie Reviews{% endblock %}
+
+{% block extra_style %}
+<style>
+    .detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .detail-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 30px;
+        background: #667eea;
+        color: #fff;
+        border-radius: 15px;
+    }
+    
+    .detail-header h2 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    
+    .rating-display {
+        font-size: 2.0em;
+        margin: 10px 0;
+    }
+    
+    .detail-content {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .info-box {
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+    }
+    
+    .info-box-label {
+        font-weight: bold;
+        color: #667eea;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+    
+    .info-box-value {
+        color: #333;
+        font-size: 1.1em;
+    }
+    
+    .review-content {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        line-height: 1.8;
+        color: #444;
+        font-size: 1.05em;
+        white-space: pre-wrap;
+    }
+    
+    .review-content-label {
+        font-weight: bold;
+        color: #667eea;
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        display: block;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+    
+    .delete-form {
+        display: inline;
+    }
+    
+    .meta-info {
+        text-align: center;
+        color: #999;
+        font-size: 0.9em;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header">
+        <h2>{{ review.title }}</h2>
+        <div class="rating-display">
+            {% for i in "12345" %}
+                {% if forloop.counter <= review.rating %}⭐{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="detail-content">
+        <div class="info-grid">
+            <div class="info-box">
+                <div class="info-box-label">감독</div>
+                <div class="info-box-value">{{ review.director }}</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">주연</div>
+                <div class="info-box-value">{{ review.main_actor }}</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">장르</div>
+                <div class="info-box-value">{{ review.genre }}</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">개봉년도</div>
+                <div class="info-box-value">{{ review.release_year }}년</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">러닝타임</div>
+                <div class="info-box-value">{{ review.get_runtime_display }}</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">별점</div>
+                <div class="info-box-value">{{ review.rating }}/5</div>
+            </div>
+        </div>
+        
+        <div class="review-content">
+            <span class="review-content-label">📝 리뷰</span>
+            {{ review.content }}
+        </div>
+        
+        <div class="meta-info">
+            작성일: {{ review.created_at|date:"Y년 m월 d일 H:i" }}
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="{% url 'reviews:reviews_list' %}" class="btn">📋 목록으로</a>
+        <a href="{% url 'reviews:reviews_update' review.pk %}" class="btn btn-cancel">✏️ 수정</a>
+        <form method="post" action="{% url 'reviews:reviews_delete' review.pk %}" class="delete-form" 
+              onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-delete">🗑️ 삭제</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
