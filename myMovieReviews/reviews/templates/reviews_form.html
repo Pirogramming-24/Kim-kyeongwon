@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if review %}리뷰 수정{% else %}리뷰 작성{% endif %} - My Movie Reviews{% endblock %}
+
+{% block extra_style %}
+<style>
+    .form-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .form-header h2 {
+        color: #667eea;
+        font-size: 2.0em;
+        margin-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-label {
+        display: block;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 1.05em;
+    }
+    
+    .form-label .required {
+        color: #f5576c;
+    }
+    
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1.0em;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+    
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+        border-color: #667eea;
+    }
+    
+    .form-textarea {
+        min-height: 200px;
+        resize: vertical;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid #eee;
+    }
+    
+    .form-hint {
+        font-size: 0.9em;
+        color: #999;
+        margin-top: 5px;
+    }
+    
+    @media (max-width: 600px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-header">
+        <h2>{% if review %}✏️ 리뷰 수정{% else %}✨ 새 리뷰 작성 ✨{% endif %}</h2>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="title" class="form-label">영화 제목 <span class="required">*</span></label>
+            <input type="text" id="title" name="title" class="form-input" 
+                   value="{% if review %}{{ review.title }}{% endif %}" required>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="director" class="form-label">감독 <span class="required">*</span></label>
+                <input type="text" id="director" name="director" class="form-input" 
+                       value="{% if review %}{{ review.director }}{% endif %}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="main_actor" class="form-label">주연 <span class="required">*</span></label>
+                <input type="text" id="main_actor" name="main_actor" class="form-input" 
+                       value="{% if review %}{{ review.main_actor }}{% endif %}" required>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="genre" class="form-label">장르 <span class="required">*</span></label>
+                <select id="genre" name="genre" class="form-select" required>
+                    <option value="">선택하세요</option>
+                    {% for value, label in genre_choices %}
+                    <option value="{{ value }}" {% if review and review.genre == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="release_year" class="form-label">개봉년도 <span class="required">*</span></label>
+                <input type="number" id="release_year" name="release_year" class="form-input" 
+                       value="{% if review %}{{ review.release_year }}{% endif %}" 
+                       min="1900" max="2026" required>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="rating" class="form-label">별점 <span class="required">*</span></label>
+                <select id="rating" name="rating" class="form-select" required>
+                    <option value="">선택하세요</option>
+                    {% for value, label in rating_choices %}
+                    <option value="{{ value }}" {% if review and review.rating == value %}selected{% endif %}>
+                        {{ value }}점 - {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="runtime" class="form-label">러닝타임 <span class="required">*</span></label>
+                <input type="number" id="runtime" name="runtime" class="form-input" 
+                       value="{% if review %}{{ review.runtime }}{% endif %}" 
+                       min="1" required>
+                <div class="form-hint">분 단위로 입력해주세요 (예: 120)</div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="content" class="form-label">리뷰 내용 <span class="required">*</span></label>
+            <textarea id="content" name="content" class="form-textarea" required>{% if review %}{{ review.content }}{% endif %}</textarea>
+            <div class="form-hint">영화에 대한 솔직한 감상을 작성해주세요</div>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% if review %}{% url 'reviews:reviews_detail' review.pk %}{% else %}{% url 'reviews:reviews_list' %}{% endif %}" 
+               class="btn btn-cancel">취소</a>
+            <button type="submit" class="btn">{% if review %}💾 수정 완료{% else %}💾 저장하기{% endif %}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

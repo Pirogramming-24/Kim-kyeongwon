@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}영화 리뷰 목록 - My Movie Reviews{% endblock %}
+
+{% block extra_style %}
+<style>
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    
+    .sort-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .sort-btn {
+        padding: 8px 16px;
+        background: #f0f0f0;
+        color: #333;
+        text-decoration: none;
+        border-radius: 15px;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+    }
+    
+    .sort-btn:hover {
+        background: #e0e0e0;
+        transform: translateY(-1px);
+    }
+    
+    .sort-btn.active {
+        background: #667eea;
+        color: #fff;
+    }
+    
+    .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+    
+    .review-card {
+        background: #e7efff;
+        border-radius: 15px;
+        padding: 25px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .review-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .review-card h3 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 1.4em;
+    }
+    
+    .review-card h3 a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .review-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        color: #666;
+        font-size: 0.95em;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .info-label {
+        font-weight: bold;
+        color: #667eea;
+        min-width: 70px;
+    }
+    
+    .rating {
+        font-size: 1.2em;
+        color: #ffd700;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+    }
+    
+    .empty-state h2 {
+        font-size: 2.0em;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <div class="sort-options">
+        <span style="color: #666; font-weight: bold; margin-right: 10px;">정렬:</span>
+        <a href="?order_by=-created_at" class="sort-btn {% if current_order == '-created_at' %}active{% endif %}">최신순</a>
+        <a href="?order_by=title" class="sort-btn {% if current_order == 'title' %}active{% endif %}">제목순</a>
+        <a href="?order_by=rating" class="sort-btn {% if current_order == 'rating' %}active{% endif %}">별점순</a>
+        <a href="?order_by=release_year" class="sort-btn {% if current_order == 'release_year' %}active{% endif %}">개봉년도순</a>
+    </div>
+    <a href="{% url 'reviews:reviews_create' %}" class="btn">✏️ 리뷰 작성</a>
+</div>
+
+{% if reviews %}
+    <div class="reviews-grid">
+        {% for review in reviews %}
+        <div class="review-card">
+            <h3><a href="{% url 'reviews:reviews_detail' review.pk %}">{{ review.title }}</a></h3>
+            <div class="review-info">
+                <div class="info-item">
+                    <span class="info-label">개봉년도:</span>
+                    <span>{{ review.release_year }}년</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">장르:</span>
+                    <span>{{ review.genre }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">별점:</span>
+                    <span class="rating">{% for i in "12345" %}{% if forloop.counter <= review.rating %}⭐{% endif %}{% endfor %}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>📽️</h2>
+        <p>아직 작성된 리뷰가 없습니다.</p>
+        <p style="margin-top: 20px;">
+            <a href="{% url 'reviews:reviews_create' %}" class="btn">첫 리뷰 작성하기</a>
+        </p>
+    </div>
+{% endif %}
+{% endblock %}
