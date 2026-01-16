@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+
+{% block title %}영화 리뷰 목록{% endblock %}
+
+{% block extra_style %}
+<style>
+    .stats-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .stat-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        min-width: 180px;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .stat-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    }
+    
+    .stat-number {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .stat-label {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+    
+    .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .filter-buttons, .sort-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .filter-btn, .sort-btn {
+        padding: 8px 16px;
+        background: #f0f0f0;
+        border: 2px solid #e0e0e0;
+        color: #666;
+        text-decoration: none;
+        border-radius: 20px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-btn:hover, .sort-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        background: #f8f9ff;
+    }
+    
+    .filter-btn.active, .sort-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-color: #667eea;
+    }
+    
+    .search-box {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .search-input {
+        flex: 1;
+        padding: 12px 20px;
+        background: #f8f9ff;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        color: #333;
+        font-size: 16px;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+    
+    .movies-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 20px;
+    }
+    
+    .movie-card {
+        background: #fff;
+        border: 2px solid #e0e0e0;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .movie-card:hover {
+        transform: translateY(-10px);
+        border-color: #667eea;
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+    }
+    
+    .movie-poster {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #f8f9ff 0%, #e9ecff 100%);
+    }
+    
+    .movie-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .movie-info {
+        padding: 20px;
+    }
+    
+    .movie-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #667eea;
+    }
+    
+    .movie-title a {
+        color: #667eea;
+        text-decoration: none;
+    }
+    
+    .movie-title a:hover {
+        color: #764ba2;
+    }
+    
+    .movie-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 14px;
+        color: #666;
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .rating-stars {
+        color: #ffd700;
+        font-size: 16px;
+    }
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 40px;
+    }
+    
+    .page-link {
+        padding: 10px 20px;
+        background: #f0f0f0;
+        border: 2px solid #e0e0e0;
+        color: #666;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .page-link:hover {
+        border-color: #667eea;
+        color: #667eea;
+    }
+    
+    .page-link.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-color: #667eea;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: #999;
+    }
+    
+    .empty-state h2 {
+        font-size: 48px;
+        margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .movies-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+        
+        .controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="stats-container">
+    <div class="stat-box">
+        <div class="stat-number">{{ total_movies }}</div>
+        <div class="stat-label">총 영화</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-number">{{ tmdb_movies }}</div>
+        <div class="stat-label">TMDB 영화</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-number">{{ user_reviews }}</div>
+        <div class="stat-label">직접 추가</div>
+    </div>
+</div>
+
+<div class="search-box">
+    <input type="text" class="search-input" placeholder="영화 제목, 감독, 배우로 검색..." id="searchInput" value="{{ search_query }}">
+    <button class="btn" onclick="performSearch()">검색</button>
+</div>
+
+<div class="controls">
+    <div class="filter-buttons">
+        <span style="color: #666; font-weight: bold; margin-right: 10px;">필터:</span>
+        <a href="?filter=all" class="filter-btn {% if current_filter == 'all' %}active{% endif %}">전체</a>
+        <a href="?filter=tmdb" class="filter-btn {% if current_filter == 'tmdb' %}active{% endif %}">TMDB</a>
+        <a href="?filter=user" class="filter-btn {% if current_filter == 'user' %}active{% endif %}">직접 추가</a>
+    </div>
+    
+    <div class="sort-buttons">
+        <span style="color: #666; margin-right: 10px;">정렬:</span>
+        <a href="?order_by=-created_at&filter={{ current_filter }}" class="sort-btn {% if current_order == '-created_at' %}active{% endif %}">최신순</a>
+        <a href="?order_by=title&filter={{ current_filter }}" class="sort-btn {% if current_order == 'title' %}active{% endif %}">제목순</a>
+        <a href="?order_by=genre&filter={{ current_filter }}" class="sort-btn {% if current_order == 'genre' %}active{% endif %}">장르별</a>
+        <a href="?order_by=rating&filter={{ current_filter }}" class="sort-btn {% if current_order == 'rating' %}active{% endif %}">평점별</a>
+        <a href="?order_by=release_year&filter={{ current_filter }}" class="sort-btn {% if current_order == 'release_year' %}active{% endif %}">개봉년도별</a>
+    </div>
+</div>
+
+{% if page_obj %}
+    <div class="movies-grid">
+        {% for movie in page_obj %}
+        <div class="movie-card">
+            <div style="position: relative;">
+                {% if movie.get_poster_url %}
+                    <img src="{{ movie.get_poster_url }}" alt="{{ movie.title }}" class="movie-poster">
+                {% elif movie.reviews.first and movie.reviews.first.poster_image %}
+                    <img src="{{ movie.reviews.first.poster_image.url }}" alt="{{ movie.title }}" class="movie-poster">
+                {% else %}
+                    <div class="movie-poster" style="display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 48px; color: #667eea;">🎬</span>
+                    </div>
+                {% endif %}
+                {% if movie.is_tmdb %}
+                    <div class="movie-badge">TMDB</div>
+                {% endif %}
+            </div>
+            <div class="movie-info">
+                <h3 class="movie-title">
+                    <a href="{% url 'reviews:movies_detail' movie.pk %}">{{ movie.title }}</a>
+                </h3>
+                <div class="movie-meta">
+                    {% if movie.release_date %}
+                    <div class="meta-item">
+                        <span>📅</span>
+                        <span>{{ movie.release_date.year }}년</span>
+                    </div>
+                    {% endif %}
+                    {% if movie.genre %}
+                    <div class="meta-item">
+                        <span>🎭</span>
+                        <span>{{ movie.genre }}</span>
+                    </div>
+                    {% endif %}
+                    {% if movie.reviews.first %}
+                    <div class="meta-item">
+                        <span class="rating-stars">⭐</span>
+                        <span>{{ movie.reviews.first.rating }}/5 (내 평점)</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&order_by={{ current_order }}&filter={{ current_filter }}" class="page-link">이전</a>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="page-link active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}&order_by={{ current_order }}&filter={{ current_filter }}" class="page-link">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&order_by={{ current_order }}&filter={{ current_filter }}" class="page-link">다음</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    <div class="empty-state">
+        <h2>🎬</h2>
+        <p>아직 등록된 영화가 없습니다.</p>
+        <p style="margin-top: 20px;">
+            <a href="{% url 'reviews:reviews_create' %}" class="btn">첫 영화 추가하기</a>
+        </p>
+    </div>
+{% endif %}
+
+<script>
+function performSearch() {
+    const query = document.getElementById('searchInput').value;
+    window.location.href = `?search=${encodeURIComponent(query)}&filter={{ current_filter }}&order_by={{ current_order }}`;
+}
+
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        performSearch();
+    }
+});
+</script>
+{% endblock %}
