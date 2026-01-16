@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ review.title }} - 리뷰{% endblock %}
+
+{% block extra_style %}
+<style>
+    .review-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .review-header {
+        text-align: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-radius: 15px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    
+    .review-title {
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+    
+    .review-rating-display {
+        font-size: 40px;
+        margin: 15px 0;
+    }
+    
+    .review-date {
+        opacity: 0.9;
+        font-size: 14px;
+    }
+    
+    .review-content-section {
+        background: #f8f9ff;
+        border: 2px solid #e9ecff;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .info-box {
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .info-label {
+        font-weight: bold;
+        color: #667eea;
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    
+    .info-value {
+        color: #333;
+        font-size: 15px;
+    }
+    
+    .review-content {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        line-height: 1.8;
+        color: #555;
+        font-size: 16px;
+        white-space: pre-wrap;
+        border: 2px solid #e0e0e0;
+    }
+    
+    .section-title {
+        color: #667eea;
+        font-size: 20px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="review-container">
+    <div class="review-header">
+        <h1 class="review-title">{{ review.title }}</h1>
+        <div class="review-rating-display">
+            {% for i in "12345" %}
+                {% if forloop.counter <= review.rating %}⭐{% endif %}
+            {% endfor %}
+        </div>
+        <p class="review-date">작성일: {{ review.created_at|date:"Y년 m월 d일 H:i" }}</p>
+        {% if review.movie and review.movie.is_tmdb %}
+        <span style="display: inline-block; margin-top: 10px; padding: 5px 15px; background: rgba(255,255,255,0.2); border-radius: 15px; font-size: 12px; font-weight: bold;">TMDB</span>
+        {% endif %}
+    </div>
+    
+    <div class="review-content-section">
+        <div class="info-grid">
+            {% if review.director %}
+            <div class="info-box">
+                <div class="info-label">감독</div>
+                <div class="info-value">{{ review.director }}</div>
+            </div>
+            {% endif %}
+            
+            {% if review.main_actor %}
+            <div class="info-box">
+                <div class="info-label">주연</div>
+                <div class="info-value">{{ review.main_actor }}</div>
+            </div>
+            {% endif %}
+            
+            <div class="info-box">
+                <div class="info-label">장르</div>
+                <div class="info-value">{{ review.genre }}</div>
+            </div>
+            
+            {% if review.release_year %}
+            <div class="info-box">
+                <div class="info-label">개봉년도</div>
+                <div class="info-value">{{ review.release_year }}년</div>
+            </div>
+            {% endif %}
+            
+            {% if review.runtime or review.movie.runtime %}
+            <div class="info-box">
+                <div class="info-label">러닝타임</div>
+                <div class="info-value">{{ review.get_runtime_display }}</div>
+            </div>
+            {% endif %}
+            
+            <div class="info-box">
+                <div class="info-label">별점</div>
+                <div class="info-value">{{ review.rating }}/5</div>
+            </div>
+        </div>
+        
+        <div class="section-title">📝 리뷰 내용</div>
+        <div class="review-content">{{ review.content }}</div>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="{% url 'reviews:home' %}" class="btn btn-secondary">📋 목록으로</a>
+        {% if review.movie %}
+        <a href="{% url 'reviews:movies_detail' review.movie.pk %}" class="btn btn-secondary">🎬 영화 정보</a>
+        {% endif %}
+        <a href="{% url 'reviews:reviews_update' review.pk %}" class="btn">✏️ 수정</a>
+        <form method="post" action="{% url 'reviews:reviews_delete' review.pk %}" style="display: inline;" 
+              onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-delete">🗑️ 삭제</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
