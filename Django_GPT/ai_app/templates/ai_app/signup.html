@@ -1,0 +1,63 @@
+{% extends 'ai_app/base.html' %}
+
+{% block title %}회원가입 - AI 웹 서비스{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 50px auto;">
+    <h2 style="color: #2c3e50; margin-bottom: 30px; text-align: center;">📝 회원가입</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+        <div class="error" style="margin-bottom: 20px;">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">아이디:</label>
+            {{ form.username }}
+            <small style="color: #7f8c8d; display: block; margin-top: 5px;">
+                150자 이하 문자, 숫자 그리고 @/./+/-/_ 만 가능합니다.
+            </small>
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">비밀번호:</label>
+            {{ form.password1 }}
+            <small style="color: #7f8c8d; display: block; margin-top: 5px;">
+                최소 8자 이상, 숫자로만 이루어질 수 없습니다.
+            </small>
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">비밀번호 확인:</label>
+            {{ form.password2 }}
+        </div>
+        
+        <button type="submit" style="width: 100%;">가입하기</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 20px; color: #7f8c8d;">
+        이미 계정이 있으신가요? <a href="{% url 'login' %}" style="color: #3498db;">로그인</a>
+    </p>
+</div>
+
+<style>
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}

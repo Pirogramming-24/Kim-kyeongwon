@@ -1,0 +1,50 @@
+{% extends 'ai_app/base.html' %}
+
+{% block title %}번역 - AI 웹 서비스{% endblock %}
+
+{% block content %}
+<h2 style="color: #2c3e50; margin-bottom: 20px;">🌐 영어 → 한국어 번역</h2>
+<p style="color: #7f8c8d; margin-bottom: 30px;">영어 텍스트를 입력하면 AI가 한국어로 번역해드립니다. (로그인 필요)</p>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="input_text">번역할 영어 텍스트를 입력하세요:</label>
+        <textarea 
+            name="input_text" 
+            id="input_text" 
+            rows="6" 
+            placeholder="Enter English text here..."
+            required
+        ></textarea>
+    </div>
+    <button type="submit">번역하기</button>
+    <div class="loading">처리 중입니다...</div>
+</form>
+
+{% if error %}
+<div class="error">
+    <strong>오류:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if result %}
+<div class="result">
+    <h3>번역 결과:</h3>
+    <p style="white-space: pre-wrap;">{{ result }}</p>
+</div>
+{% endif %}
+
+{% if history %}
+<div class="history">
+    <h3>최근 번역 내역 (최대 5개)</h3>
+    {% for item in history %}
+    <div class="history-item">
+        <p><strong>영어:</strong> {{ item.input_text }}</p>
+        <p><strong>한국어:</strong> {{ item.output_text }}</p>
+        <p style="color: #95a5a6; font-size: 12px;">{{ item.created_at|date:"Y-m-d H:i" }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
