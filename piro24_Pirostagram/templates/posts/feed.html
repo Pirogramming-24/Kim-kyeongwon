@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+
+{% block title %}피드 - Pirostagram{% endblock %}
+
+{% block extra_css %}
+<style>
+    .post-card {
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin-bottom: 20px;
+        max-width: 630px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .post-header {
+        display: flex;
+        align-items: center;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .post-header img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 12px;
+    }
+    
+    .post-username {
+        font-weight: 600;
+        color: var(--text-color);
+        text-decoration: none;
+    }
+    
+    .post-image {
+        width: 100%;
+        display: block;
+    }
+    
+    .post-actions {
+        padding: 8px 16px;
+        display: flex;
+        gap: 16px;
+    }
+    
+    .action-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 8px;
+        color: var(--text-color);
+        transition: color 0.2s;
+    }
+    
+    .action-btn:hover {
+        color: var(--secondary-text);
+    }
+    
+    .like-btn.liked i {
+        color: #ed4956;
+    }
+    
+    .post-likes {
+        padding: 0 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    
+    .post-content {
+        padding: 0 16px;
+        margin-bottom: 8px;
+    }
+    
+    .comment-author {
+        font-weight: 600;
+        margin-right: 8px;
+    }
+    
+    .post-comments {
+        padding: 0 16px;
+        margin-bottom: 8px;
+    }
+    
+    .comment-item {
+        margin-bottom: 4px;
+    }
+    
+    .post-time {
+        padding: 0 16px;
+        font-size: 12px;
+        color: var(--secondary-text);
+        margin-bottom: 12px;
+    }
+    
+    .comment-form {
+        border-top: 1px solid var(--border-color);
+        padding: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    .comment-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 14px;
+    }
+    
+    .story-bar {
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+        max-width: 630px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+    }
+    
+    .story-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-color);
+    }
+    
+    .story-avatar {
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        padding: 3px;
+        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        margin-bottom: 8px;
+    }
+    
+    .story-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+    }
+    
+    .story-username {
+        font-size: 12px;
+        max-width: 74px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 630px;">
+    <!-- 스토리 바 -->
+    <div class="story-bar">
+        <a href="{% url 'stories:create' %}" class="story-item">
+            <div class="story-avatar">
+                {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="{{ user.username }}">
+                {% else %}
+                <div style="width: 60px; height: 60px; border-radius: 50%; background: #e0e0e0; border: 3px solid white;"></div>
+                {% endif %}
+            </div>
+            <span class="story-username">스토리+</span>
+        </a>
+        
+        <!-- 팔로우한 사람들의 스토리 표시 -->
+        {% load tz %}
+        {% for followed_user in user.following.all %}
+            {% if followed_user.stories.all %}
+                {% with followed_user.stories.first as latest_story %}
+                    {% if not latest_story.is_expired %}
+                    <a href="{% url 'stories:view' followed_user.username %}" class="story-item">
+                        <div class="story-avatar">
+                            {% if followed_user.profile_image %}
+                            <img src="{{ followed_user.profile_image.url }}" alt="{{ followed_user.username }}">
+                            {% else %}
+                            <div style="width: 60px; height: 60px; border-radius: 50%; background: #e0e0e0; border: 3px solid white;"></div>
+                            {% endif %}
+                        </div>
+                        <span class="story-username">{{ followed_user.username }}</span>
+                    </a>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    
+    <!-- 게시글 정렬 드롭다운 -->
+    <div class="d-flex justify-content-between align-items-center mb-3" style="max-width: 630px; margin: 0 auto;">
+        <h5 class="mb-0">게시글 정렬:</h5>
+        <select class="form-select w-auto" onchange="location = this.value;">
+            <option value="?sort=latest" {% if current_sort == 'latest' %}selected{% endif %}>최신순</option>
+            <option value="?sort=likes" {% if current_sort == 'likes' %}selected{% endif %}>좋아요순</option>
+        </select>
+    </div>
+    
+    <!-- 게시글 피드 -->
+    {% if posts %}
+    {% for post in posts %}
+    <div class="post-card">
+        <!-- 게시글 헤더 -->
+        <div class="post-header">
+            <a href="{% url 'users:profile' post.author.username %}" class="d-flex align-items-center text-decoration-none">
+                {% if post.author.profile_image %}
+                <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.username }}">
+                {% else %}
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0e0e0; margin-right: 12px;"></div>
+                {% endif %}
+                <span class="post-username">{{ post.author.username }}</span>
+            </a>
+            
+            {% if post.author == user %}
+            <div class="ms-auto dropdown">
+                <button class="btn btn-link text-dark" data-bs-toggle="dropdown">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'posts:update' post.pk %}">수정</a></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'posts:delete' post.pk %}">삭제</a></li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- 게시글 이미지 -->
+        <img src="{{ post.image.url }}" alt="Post" class="post-image">
+        
+        <!-- 게시글 액션 버튼 -->
+        <div class="post-actions">
+            <button class="action-btn like-btn {% if user in post.likes.all %}liked{% endif %}" 
+                    data-post-id="{{ post.pk }}"
+                    data-liked="{% if user in post.likes.all %}true{% else %}false{% endif %}">
+                <i class="{% if user in post.likes.all %}fas{% else %}far{% endif %} fa-heart"></i>
+            </button>
+            
+            <a href="{% url 'posts:detail' post.pk %}" class="action-btn">
+                <i class="far fa-comment"></i>
+            </a>
+        </div>
+        
+        <!-- 좋아요 수 -->
+        <div class="post-likes">
+            좋아요 <span class="likes-count">{{ post.get_likes_count }}</span>개
+        </div>
+        
+        <!-- 게시글 내용 -->
+        {% if post.content %}
+        <div class="post-content">
+            <span class="comment-author">{{ post.author.username }}</span>
+            {{ post.content }}
+        </div>
+        {% endif %}
+        
+        <!-- 댓글 보기 -->
+        {% if post.comments.count > 0 %}
+        <div class="post-comments">
+            <a href="{% url 'posts:detail' post.pk %}" class="text-muted text-decoration-none d-block mb-2" style="font-size: 14px;">
+                댓글 {{ post.get_comments_count }}개 모두 보기
+            </a>
+            
+            {% for comment in post.comments.all|slice:":2" %}
+            <div class="comment-item">
+                <span class="comment-author">{{ comment.author.username }}</span>
+                {{ comment.content }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- 게시 시간 -->
+        <div class="post-time">
+            {{ post.created_at|timesince }} 전
+        </div>
+        
+        <!-- 댓글 입력 -->
+        <form method="post" action="{% url 'posts:comment_create' post.pk %}" class="comment-form">
+            {% csrf_token %}
+            <input type="text" name="content" class="comment-input" placeholder="댓글 달기..." required>
+            <button type="submit" class="btn btn-link text-primary fw-bold" style="text-decoration: none; padding: 0 8px;">게시</button>
+        </form>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-images fa-3x text-muted mb-3"></i>
+        <h5>게시물이 없습니다</h5>
+        <p class="text-muted">팔로우를 시작하거나 첫 게시물을 작성해보세요!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 좋아요 버튼 클릭 이벤트
+$(document).ready(function() {
+    $('.like-btn').click(function() {
+        var btn = $(this);
+        var postId = btn.data('post-id');
+        var isLiked = btn.data('liked');
+        var icon = btn.find('i');
+        var likesCountElement = btn.closest('.post-card').find('.likes-count');
+        
+        $.ajax({
+            url: '/posts/' + postId + '/like/',
+            type: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                // 아이콘 변경
+                if (data.is_liked) {
+                    icon.removeClass('far').addClass('fas');
+                    btn.addClass('liked');
+                } else {
+                    icon.removeClass('fas').addClass('far');
+                    btn.removeClass('liked');
+                }
+                
+                // 좋아요 수 업데이트
+                likesCountElement.text(data.likes_count);
+                
+                // 데이터 속성 업데이트
+                btn.data('liked', data.is_liked);
+            },
+            error: function() {
+                alert('오류가 발생했습니다.');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

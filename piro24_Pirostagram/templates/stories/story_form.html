@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}스토리 만들기 - Pirostagram{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <h2 class="mb-4">스토리 만들기</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                스토리는 24시간 후 자동으로 삭제됩니다. 여러 스토리를 올리려면 이 화면을 반복해서 사용하세요.
+            </div>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">업로드</button>
+                    <a href="{% url 'posts:feed' %}" class="btn btn-outline-secondary">취소</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

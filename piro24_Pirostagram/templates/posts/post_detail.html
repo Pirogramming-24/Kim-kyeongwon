@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}게시글 - Pirostagram{% endblock %}
+
+{% block extra_css %}
+<style>
+    .post-detail-card {
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 500px;
+        max-height: 80vh;
+    }
+    
+    .post-image-section {
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .post-image-section img {
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+    }
+    
+    .post-sidebar {
+        display: flex;
+        flex-direction: column;
+        max-height: 80vh;
+    }
+    
+    .post-header {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+    }
+    
+    .comments-section {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+    }
+    
+    .comment-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    
+    .comment-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .comment-content {
+        flex: 1;
+    }
+    
+    .comment-username {
+        font-weight: 600;
+        margin-right: 8px;
+    }
+    
+    .comment-actions {
+        font-size: 12px;
+        color: var(--secondary-text);
+        margin-top: 8px;
+    }
+    
+    .post-actions-section {
+        border-top: 1px solid var(--border-color);
+        padding: 16px;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 12px;
+    }
+    
+    .comment-form-section {
+        border-top: 1px solid var(--border-color);
+        padding: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; padding-top: 40px;">
+    <div class="post-detail-card">
+        <!-- 이미지 섹션 -->
+        <div class="post-image-section">
+            <img src="{{ post.image.url }}" alt="Post">
+        </div>
+        
+        <!-- 사이드바 -->
+        <div class="post-sidebar">
+            <!-- 헤더 -->
+            <div class="post-header">
+                <a href="{% url 'users:profile' post.author.username %}" class="d-flex align-items-center text-decoration-none text-dark">
+                    {% if post.author.profile_image %}
+                    <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.username }}" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                    {% else %}
+                    <div class="rounded-circle me-2 bg-secondary" style="width: 32px; height: 32px;"></div>
+                    {% endif %}
+                    <span class="fw-bold">{{ post.author.username }}</span>
+                </a>
+                
+                {% if post.author == user %}
+                <div class="ms-auto dropdown">
+                    <button class="btn btn-link text-dark" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'posts:update' post.pk %}">수정</a></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'posts:delete' post.pk %}">삭제</a></li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- 댓글 섹션 -->
+            <div class="comments-section">
+                <!-- 게시글 내용 -->
+                {% if post.content %}
+                <div class="comment-item">
+                    {% if post.author.profile_image %}
+                    <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.username }}" class="comment-avatar">
+                    {% else %}
+                    <div class="comment-avatar bg-secondary"></div>
+                    {% endif %}
+                    <div class="comment-content">
+                        <span class="comment-username">{{ post.author.username }}</span>
+                        {{ post.content }}
+                        <div class="comment-actions">
+                            {{ post.created_at|timesince }} 전
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- 댓글 목록 -->
+                {% for comment in comments %}
+                <div class="comment-item">
+                    {% if comment.author.profile_image %}
+                    <img src="{{ comment.author.profile_image.url }}" alt="{{ comment.author.username }}" class="comment-avatar">
+                    {% else %}
+                    <div class="comment-avatar bg-secondary"></div>
+                    {% endif %}
+                    <div class="comment-content">
+                        <span class="comment-username">{{ comment.author.username }}</span>
+                        {{ comment.content }}
+                        <div class="comment-actions">
+                            <span>{{ comment.created_at|timesince }} 전</span>
+                            {% if comment.author == user %}
+                            <a href="{% url 'posts:comment_update' comment.pk %}" class="ms-3">수정</a>
+                            <a href="{% url 'posts:comment_delete' comment.pk %}" class="ms-2 text-danger">삭제</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- 액션 버튼 -->
+            <div class="post-actions-section">
+                <div class="action-buttons">
+                    <button class="btn btn-link text-dark p-0 like-btn {% if user in post.likes.all %}liked{% endif %}" 
+                            data-post-id="{{ post.pk }}"
+                            data-liked="{% if user in post.likes.all %}true{% else %}false{% endif %}">
+                        <i class="{% if user in post.likes.all %}fas{% else %}far{% endif %} fa-heart fa-2x"></i>
+                    </button>
+                </div>
+                <div class="fw-bold">
+                    좋아요 <span class="likes-count">{{ post.get_likes_count }}</span>개
+                </div>
+                <div class="text-muted small">
+                    {{ post.created_at|date:"Y년 n월 j일" }}
+                </div>
+            </div>
+            
+            <!-- 댓글 입력 -->
+            <div class="comment-form-section">
+                <form method="post" action="{% url 'posts:comment_create' post.pk %}" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <input type="text" name="content" class="form-control" placeholder="댓글 달기..." required>
+                    <button type="submit" class="btn btn-primary">게시</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('.like-btn').click(function() {
+        var btn = $(this);
+        var postId = btn.data('post-id');
+        var icon = btn.find('i');
+        var likesCountElement = $('.likes-count');
+        
+        $.ajax({
+            url: '/posts/' + postId + '/like/',
+            type: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                if (data.is_liked) {
+                    icon.removeClass('far').addClass('fas');
+                    btn.addClass('liked');
+                } else {
+                    icon.removeClass('fas').addClass('far');
+                    btn.removeClass('liked');
+                }
+                likesCountElement.text(data.likes_count);
+                btn.data('liked', data.is_liked);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

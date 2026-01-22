@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}게시글 삭제 - Pirostagram{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <h2 class="mb-4">게시글 삭제</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                정말로 이 게시글을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+            </div>
+            
+            <div class="mb-3">
+                <img src="{{ post.image.url }}" alt="Post" class="img-fluid rounded">
+            </div>
+            
+            {% if post.content %}
+            <p>{{ post.content }}</p>
+            {% endif %}
+            
+            <form method="post" class="d-flex gap-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">삭제</button>
+                <a href="{% url 'posts:detail' post.pk %}" class="btn btn-outline-secondary">취소</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if list_type == 'followers' %}팔로워{% else %}팔로잉{% endif %} - {{ profile_user.username }}
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <h2 class="mb-4">
+        {{ profile_user.username }}의 
+        {% if list_type == 'followers' %}팔로워{% else %}팔로잉{% endif %}
+    </h2>
+    
+    {% if users %}
+    <div class="bg-white rounded shadow-sm">
+        {% for user in users %}
+        <div class="d-flex align-items-center p-3 border-bottom">
+            <a href="{% url 'users:profile' user.username %}" class="d-flex align-items-center text-decoration-none text-dark flex-grow-1">
+                {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-circle me-3 bg-secondary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                    <i class="fas fa-user text-white"></i>
+                </div>
+                {% endif %}
+                
+                <div>
+                    <div class="fw-bold">{{ user.username }}</div>
+                    {% if user.get_full_name %}
+                    <div class="text-muted small">{{ user.get_full_name }}</div>
+                    {% endif %}
+                </div>
+            </a>
+            
+            <a href="{% url 'users:profile' user.username %}" class="btn btn-sm btn-outline-primary">프로필 보기</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+        <h5>
+            {% if list_type == 'followers' %}
+            아직 팔로워가 없습니다.
+            {% else %}
+            아직 팔로잉이 없습니다.
+            {% endif %}
+        </h5>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
