@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}유저 검색 - Pirostagram{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <h2 class="mb-4">유저 검색</h2>
+    
+    <!-- 검색 폼 -->
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="사용자 이름을 검색하세요..." value="{{ query }}">
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-search"></i> 검색
+            </button>
+        </div>
+    </form>
+    
+    <!-- 검색 결과 -->
+    {% if query %}
+        {% if users %}
+        <div class="bg-white rounded shadow-sm">
+            {% for search_user in users %}
+            <div class="d-flex align-items-center p-3 border-bottom">
+                <a href="{% url 'users:profile' search_user.username %}" class="d-flex align-items-center text-decoration-none text-dark flex-grow-1">
+                    {% if search_user.profile_image %}
+                    <img src="{{ search_user.profile_image.url }}" alt="{{ search_user.username }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% else %}
+                    <div class="rounded-circle me-3 bg-secondary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div>
+                        <div class="fw-bold">{{ search_user.username }}</div>
+                        {% if search_user.get_full_name %}
+                        <div class="text-muted small">{{ search_user.get_full_name }}</div>
+                        {% endif %}
+                    </div>
+                </a>
+                
+                <!-- 팔로우 버튼 -->
+                {% if user.following.all|length > 0 and search_user in user.following.all %}
+                <button class="btn btn-sm btn-outline-secondary follow-btn" 
+                        data-username="{{ search_user.username }}"
+                        data-following="true">
+                    팔로잉
+                </button>
+                {% else %}
+                <button class="btn btn-sm btn-primary follow-btn" 
+                        data-username="{{ search_user.username }}"
+                        data-following="false">
+                    팔로우
+                </button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-user-slash fa-3x text-muted mb-3"></i>
+            <h5>"{{ query }}"에 대한 검색 결과가 없습니다.</h5>
+        </div>
+        {% endif %}
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+        <p class="text-muted">검색어를 입력하세요</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 팔로우 버튼 클릭 이벤트
+$(document).ready(function() {
+    $('.follow-btn').click(function() {
+        var btn = $(this);
+        var username = btn.data('username');
+        var isFollowing = btn.data('following');
+        
+        $.ajax({
+            url: '/users/' + username + '/follow/',
+            type: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                // 버튼 텍스트 변경
+                if (data.is_following) {
+                    btn.text('팔로잉');
+                    btn.removeClass('btn-primary').addClass('btn-outline-secondary');
+                    btn.data('following', true);
+                } else {
+                    btn.text('팔로우');
+                    btn.removeClass('btn-outline-secondary').addClass('btn-primary');
+                    btn.data('following', false);
+                }
+            },
+            error: function() {
+                alert('오류가 발생했습니다.');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

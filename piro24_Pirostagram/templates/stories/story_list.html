@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}스토리 - Pirostagram{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <h2 class="mb-4">스토리</h2>
+    
+    {% if stories %}
+    <div class="row g-3">
+        {% for story_data in stories %}
+        <div class="col-md-4">
+            <a href="{% url 'stories:view' story_data.user.username %}" class="text-decoration-none">
+                <div class="card">
+                    <div class="card-body text-center">
+                        {% if story_data.user.profile_image %}
+                        <img src="{{ story_data.user.profile_image.url }}" alt="{{ story_data.user.username }}" class="rounded-circle mb-2" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #405DE6;">
+                        {% else %}
+                        <div class="rounded-circle mb-2 mx-auto bg-secondary d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border: 3px solid #405DE6;">
+                            <i class="fas fa-user fa-2x text-white"></i>
+                        </div>
+                        {% endif %}
+                        <h6 class="mb-0">{{ story_data.user.username }}</h6>
+                        <small class="text-muted">{{ story_data.count }}개의 스토리</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-circle-plus fa-3x text-muted mb-3"></i>
+        <h5>활성 스토리가 없습니다</h5>
+        <p class="text-muted">팔로우한 사람들의 스토리가 여기에 표시됩니다.</p>
+        <a href="{% url 'stories:create' %}" class="btn btn-primary">스토리 만들기</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

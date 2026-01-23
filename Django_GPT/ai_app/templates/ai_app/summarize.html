@@ -1,0 +1,63 @@
+{% extends 'ai_app/base.html' %}
+
+{% block title %}요약 - AI 웹 서비스{% endblock %}
+
+{% block content %}
+<h2 style="color: #2c3e50; margin-bottom: 20px;">📝 텍스트 요약</h2>
+<p style="color: #7f8c8d; margin-bottom: 30px;">긴 텍스트를 입력하면 AI가 짧게 요약해드립니다. (로그인 없이 사용 가능)</p>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="input_text">요약할 텍스트를 입력하세요:</label>
+        <textarea 
+            name="input_text" 
+            id="input_text" 
+            rows="8" 
+            placeholder="여기에 요약할 텍스트를 입력하세요..."
+            required
+        ></textarea>
+    </div>
+    <button type="submit">요약하기</button>
+    <div class="loading">처리 중입니다...</div>
+</form>
+
+{% if error %}
+<div class="error">
+    <strong>오류:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if result %}
+<div class="result">
+    <h3>요약 결과:</h3>
+    <p>{{ result }}</p>
+</div>
+{% endif %}
+
+{% if history %}
+<div class="history">
+    <h3>최근 요약 내역 (최대 5개)</h3>
+    {% for item in history %}
+    <div class="history-item">
+        {% if user.is_authenticated %}
+        <p><strong>입력:</strong> {{ item.input_text }}</p>
+        <p><strong>결과:</strong> {{ item.output_text }}</p>
+        <p style="color: #95a5a6; font-size: 12px;">{{ item.created_at|date:"Y-m-d H:i" }}</p>
+        {% else %}
+        <p><strong>입력:</strong> {{ item.input }}</p>
+        <p><strong>결과:</strong> {{ item.output }}</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if not user.is_authenticated %}
+<div style="margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
+    <p style="color: #856404;">
+        💡 <a href="{% url 'login' %}" style="color: #007bff;">로그인</a>하시면 요약 내역이 저장됩니다!
+    </p>
+</div>
+{% endif %}
+{% endblock %}

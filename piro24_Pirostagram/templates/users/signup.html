@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}회원가입 - Pirostagram{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 400px; margin-top: 80px;">
+    <div class="card shadow-sm">
+        <div class="card-body p-5">
+            <h2 class="text-center mb-4" style="color: var(--primary-color); font-weight: bold;">Pirostagram</h2>
+            <p class="text-center text-muted mb-4">친구들의 사진과 동영상을 보려면 가입하세요.</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="mb-3">
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn btn-primary w-100">가입</button>
+            </form>
+            
+            <hr class="my-4">
+            
+            <p class="text-center mb-0">
+                계정이 있으신가요? <a href="{% url 'users:login' %}">로그인</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
